@@ -84,7 +84,8 @@
 
 
 
-<meta name="description" content="cocos2dx的事件分发机制事件系统应该有事件源，事件，事件接受对象，事件监听器组成Event 继承自 Ref,类型有  
+<meta name="description" content="cocos2dx的事件分发机制事件系统事件系统应该有1 事件源2 事件3 事件接受对象4 事件监听器组成组成
+Event 基类Event 继承自 Ref,类型有  
 
 TOUCH
 KEYBOARD
@@ -92,12 +93,15 @@ ACCELERATION 陀螺仪
 MOUSE
 FOCUS
 GAME_CONTROLLER
-CUSTOM属性：  123Type _type;     ///&amp;lt; Event typebool _isStopped;       ///&amp;l">
+CUSTOM
+
+属性：123Type _type;     ///&amp;lt; Event typebool _is">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cocos2dx 事件系统分析">
-<meta property="og:url" content="http://yoursite.com/2017/02/21/cocos2d-x/Cocos2dx-事件系统分析/index.html">
+<meta property="og:title" content="Cocos2dx 单点触摸事件分发步骤分析">
+<meta property="og:url" content="http://yoursite.com/2017/02/21/cocos2d-x/Cocos2dx-单点触摸事件分发分析/index.html">
 <meta property="og:site_name" content="Zhijzan's Blog">
-<meta property="og:description" content="cocos2dx的事件分发机制事件系统应该有事件源，事件，事件接受对象，事件监听器组成Event 继承自 Ref,类型有  
+<meta property="og:description" content="cocos2dx的事件分发机制事件系统事件系统应该有1 事件源2 事件3 事件接受对象4 事件监听器组成组成
+Event 基类Event 继承自 Ref,类型有  
 
 TOUCH
 KEYBOARD
@@ -105,11 +109,14 @@ ACCELERATION 陀螺仪
 MOUSE
 FOCUS
 GAME_CONTROLLER
-CUSTOM属性：  123Type _type;     ///&amp;lt; Event typebool _isStopped;       ///&amp;l">
-<meta property="og:updated_time" content="2017-02-21T13:03:13.000Z">
+CUSTOM
+
+属性：123Type _type;     ///&amp;lt; Event typebool _is">
+<meta property="og:updated_time" content="2017-02-21T16:08:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cocos2dx 事件系统分析">
-<meta name="twitter:description" content="cocos2dx的事件分发机制事件系统应该有事件源，事件，事件接受对象，事件监听器组成Event 继承自 Ref,类型有  
+<meta name="twitter:title" content="Cocos2dx 单点触摸事件分发步骤分析">
+<meta name="twitter:description" content="cocos2dx的事件分发机制事件系统事件系统应该有1 事件源2 事件3 事件接受对象4 事件监听器组成组成
+Event 基类Event 继承自 Ref,类型有  
 
 TOUCH
 KEYBOARD
@@ -117,7 +124,9 @@ ACCELERATION 陀螺仪
 MOUSE
 FOCUS
 GAME_CONTROLLER
-CUSTOM属性：  123Type _type;     ///&amp;lt; Event typebool _isStopped;       ///&amp;l">
+CUSTOM
+
+属性：123Type _type;     ///&amp;lt; Event typebool _is">
 
 
 
@@ -135,7 +144,7 @@ CUSTOM属性：  123Type _type;     ///&amp;lt; Event typebool _isStopped;      
   };
 </script>
 
-  <title> Cocos2dx 事件系统分析 | Zhijzan's Blog </title>
+  <title> Cocos2dx 单点触摸事件分发步骤分析 | Zhijzan's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -257,7 +266,7 @@ CUSTOM属性：  123Type _type;     ///&amp;lt; Event typebool _isStopped;      
             
             
               
-                Cocos2dx 事件系统分析
+                Cocos2dx 单点触摸事件分发步骤分析
               
             
           </h1>
@@ -316,7 +325,8 @@ CUSTOM属性：  123Type _type;     ///&amp;lt; Event typebool _isStopped;      
       
 
       
-        <h1 id="cocos2dx的事件分发机制"><a href="#cocos2dx的事件分发机制" class="headerlink" title="cocos2dx的事件分发机制"></a>cocos2dx的事件分发机制</h1><p>事件系统应该有<br>事件源，事件，事件接受对象，事件监听器组成<br>Event 继承自 Ref,类型有  </p>
+        <h1 id="cocos2dx的事件分发机制"><a href="#cocos2dx的事件分发机制" class="headerlink" title="cocos2dx的事件分发机制"></a>cocos2dx的事件分发机制</h1><h2 id="事件系统"><a href="#事件系统" class="headerlink" title="事件系统"></a>事件系统</h2><p>事件系统应该有<br>1 事件源<br>2 事件<br>3 事件接受对象<br>4 事件监听器组成<br>组成</p>
+<h2 id="Event-基类"><a href="#Event-基类" class="headerlink" title="Event 基类"></a>Event 基类</h2><p>Event 继承自 Ref,类型有  </p>
 <ul>
 <li>TOUCH</li>
 <li>KEYBOARD</li>
@@ -324,17 +334,16 @@ CUSTOM属性：  123Type _type;     ///&amp;lt; Event typebool _isStopped;      
 <li>MOUSE</li>
 <li>FOCUS</li>
 <li>GAME_CONTROLLER</li>
-<li>CUSTOM<br>属性：  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Type _type;     <span class="comment">///&lt; Event type</span></div><div class="line"><span class="keyword">bool</span> _isStopped;       <span class="comment">///&lt; whether the event has been stopped.</span></div><div class="line">Node* _currentTarget;  <span class="comment">///&lt; Current target</span></div></pre></td></tr></table></figure>
-</li>
+<li>CUSTOM</li>
 </ul>
+<p>属性：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Type _type;     <span class="comment">///&lt; Event type</span></div><div class="line"><span class="keyword">bool</span> _isStopped;       <span class="comment">///&lt; whether the event has been stopped.</span></div><div class="line">Node* _currentTarget;  <span class="comment">///&lt; Current target</span></div></pre></td></tr></table></figure></p>
 <h2 id="Touch事件"><a href="#Touch事件" class="headerlink" title="Touch事件"></a>Touch事件</h2><p>EventTouch : public Event<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> CC_DLL EventTouch : <span class="keyword">public</span> Event</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> MAX_TOUCHES = <span class="number">15</span>;</div><div class="line">    <span class="keyword">enum</span> <span class="keyword">class</span> EventCode</div><div class="line">    &#123;</div><div class="line">        BEGAN,</div><div class="line">        MOVED,</div><div class="line">        ENDED,</div><div class="line">        CANCELLED</div><div class="line">    &#125;;</div><div class="line">   <span class="function"><span class="keyword">inline</span> EventCode <span class="title">getEventCode</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> _eventCode; &#125;;</div><div class="line">   <span class="keyword">inline</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Touch*&gt;&amp; getTouches() <span class="keyword">const</span> &#123; <span class="keyword">return</span> _touches; &#125;;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    EventCode _eventCode;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Touch*&gt; _touches;</div><div class="line">    <span class="keyword">friend</span> <span class="keyword">class</span> GLView;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<h2 id="EventListenerTouchOneByOne"><a href="#EventListenerTouchOneByOne" class="headerlink" title="EventListenerTouchOneByOne"></a>EventListenerTouchOneByOne</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> LISTENER_ID;</div><div class="line">    <span class="function"><span class="keyword">static</span> EventListenerTouchOneByOne* <span class="title">create</span><span class="params">()</span></span>;</div><div class="line">    <span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="keyword">bool</span>(Touch*, Event*)&gt; ccTouchBeganCallback;</div><div class="line">    <span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>(Touch*, Event*)&gt; ccTouchCallback;</div><div class="line">    ccTouchBeganCallback onTouchBegan;</div><div class="line">    ccTouchCallback onTouchMoved;</div><div class="line">    ccTouchCallback onTouchEnded;</div><div class="line">    ccTouchCallback onTouchCancelled;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Touch*&gt; _claimedTouches;</div><div class="line">    <span class="keyword">bool</span> _needSwallow;</div></pre></td></tr></table></figure>
+<h2 id="单点触摸"><a href="#单点触摸" class="headerlink" title="单点触摸"></a>单点触摸</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> EventListenerTouchOneByOne;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> LISTENER_ID;</div><div class="line">    <span class="function"><span class="keyword">static</span> EventListenerTouchOneByOne* <span class="title">create</span><span class="params">()</span></span>;</div><div class="line">    <span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="keyword">bool</span>(Touch*, Event*)&gt; ccTouchBeganCallback;</div><div class="line">    <span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>(Touch*, Event*)&gt; ccTouchCallback;</div><div class="line">    ccTouchBeganCallback onTouchBegan;</div><div class="line">    ccTouchCallback onTouchMoved;</div><div class="line">    ccTouchCallback onTouchEnded;</div><div class="line">    ccTouchCallback onTouchCancelled;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Touch*&gt; _claimedTouches;</div><div class="line">    <span class="keyword">bool</span> _needSwallow;</div></pre></td></tr></table></figure>
 <h2 id="Touch事件的分发过程"><a href="#Touch事件的分发过程" class="headerlink" title="Touch事件的分发过程"></a>Touch事件的分发过程</h2><ul>
-<li>TouchEvent的创建<br>CCGLView.cpp中的个处理touch的函数</li>
-<li>handleTouchesBegin</li>
-<li>handleTouchesMoved</li>
-<li>handleTouchesEnded</li>
-<li>handleTouchesOfEndOrCancel</li>
+<li><p>创建<br>TouchEvent和Touch类的创建是在CCGLView.cpp中的<br>1 handleTouchesBegin<br>2 handleTouchesMoved<br>3 handleTouchesEnded<br>4 handleTouchesOfEndOrCancel<br>四个函数中创建的，然后调用EventDispatcher的dispatchEvent方法分发出去。</p>
+</li>
+<li><p>分发<br>分发过程主要在CCEventDispatcher.cpp中,<br>1 dispatchEvent函数中根据event-&gt;getType()去获取类型然后调用dispatchTouchEvent函数去处理<br>2 排序touch监听器<br>3 分别对单点触摸和多点触摸和两者的并集生处理,成对应的onEvent回调<br>4 调用dispatchEventToListener去分发到各个listener<br>5 dispatchEventToListener中根据优先级<0,=0,>0去分发到listener之中<br>如果onEvent回调返回true则停止传播<br>单点触摸,其实是一个地方点下之后，其他之后的点就不再响应,就是利用onEvent这里做到的</0,=0,></p>
+</li>
 </ul>
 
       
@@ -473,7 +482,7 @@ CUSTOM属性：  123Type _type;     ///&amp;lt; Event typebool _isStopped;      
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cocos2dx的事件分发机制"><span class="nav-number">1.</span> <span class="nav-text">cocos2dx的事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Touch事件"><span class="nav-number">1.1.</span> <span class="nav-text">Touch事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EventListenerTouchOneByOne"><span class="nav-number">1.2.</span> <span class="nav-text">EventListenerTouchOneByOne</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Touch事件的分发过程"><span class="nav-number">1.3.</span> <span class="nav-text">Touch事件的分发过程</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cocos2dx的事件分发机制"><span class="nav-number">1.</span> <span class="nav-text">cocos2dx的事件分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#事件系统"><span class="nav-number">1.1.</span> <span class="nav-text">事件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-基类"><span class="nav-number">1.2.</span> <span class="nav-text">Event 基类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Touch事件"><span class="nav-number">1.3.</span> <span class="nav-text">Touch事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单点触摸"><span class="nav-number">1.4.</span> <span class="nav-text">单点触摸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Touch事件的分发过程"><span class="nav-number">1.5.</span> <span class="nav-text">Touch事件的分发过程</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
