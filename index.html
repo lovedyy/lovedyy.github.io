@@ -232,6 +232,99 @@
             
               
                 
+                <a class="post-title-link" href="/2017/02/22/cocos2d-x/Cocos2dx-一般事件监听器的流程/" itemprop="url">
+                  Cocos2dx 一般事件监听器的流程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-22T00:16:05+08:00" content="2017-02-22">
+              2017-02-22
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="事件监听器"><a href="#事件监听器" class="headerlink" title="事件监听器"></a>事件监听器</h1>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/02/21/cocos2d-x/Cocos2dx-单点触摸事件分发分析/" itemprop="url">
                   Cocos2dx 单点触摸事件分发步骤分析
                 </a>
@@ -315,6 +408,11 @@
 <li><p>分发<br>分发过程主要在CCEventDispatcher.cpp中,<br>1 dispatchEvent函数中根据event-&gt;getType()去获取类型然后调用dispatchTouchEvent函数去处理<br>2 排序touch监听器<br>3 分别对单点触摸和多点触摸和两者的并集生处理,成对应的onEvent回调<br>4 调用dispatchEventToListener去分发到各个listener<br>5 dispatchEventToListener中根据优先级<0,=0,>0去分发到listener之中<br>如果onEvent回调返回true则停止传播<br>单点触摸,其实是一个地方点下之后，其他之后的点就不再响应,就是利用onEvent这里做到的</0,=0,></p>
 </li>
 </ul>
+<h2 id="对touch-listener的处理顺序"><a href="#对touch-listener的处理顺序" class="headerlink" title="对touch listener的处理顺序"></a>对touch listener的处理顺序</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> EventDispatcher::sortEventListeners(<span class="keyword">const</span> EventListener::ListenerID&amp; listenerID)</div><div class="line">&#123;</div><div class="line">    DirtyFlag dirtyFlag = DirtyFlag::NONE;</div><div class="line">    </div><div class="line">    <span class="keyword">auto</span> dirtyIter = _priorityDirtyFlagMap.find(listenerID);</div><div class="line">    <span class="keyword">if</span> (dirtyIter != _priorityDirtyFlagMap.end())</div><div class="line">    &#123;</div><div class="line">        dirtyFlag = dirtyIter-&gt;second;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (dirtyFlag != DirtyFlag::NONE)</div><div class="line">    &#123;</div><div class="line">        <span class="comment">// Clear the dirty flag first, if `rootNode` is nullptr, then set its dirty flag of scene graph priority</span></div><div class="line">        dirtyIter-&gt;second = DirtyFlag::NONE;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> ((<span class="keyword">int</span>)dirtyFlag &amp; (<span class="keyword">int</span>)DirtyFlag::FIXED_PRIORITY)</div><div class="line">        &#123;</div><div class="line">            sortEventListenersOfFixedPriority(listenerID);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> ((<span class="keyword">int</span>)dirtyFlag &amp; (<span class="keyword">int</span>)DirtyFlag::SCENE_GRAPH_PRIORITY)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">auto</span> rootNode = Director::getInstance()-&gt;getRunningScene();</div><div class="line">            <span class="keyword">if</span> (rootNode)</div><div class="line">            &#123;</div><div class="line">                sortEventListenersOfSceneGraphPriority(listenerID, rootNode);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span></div><div class="line">            &#123;</div><div class="line">                dirtyIter-&gt;second = DirtyFlag::SCENE_GRAPH_PRIORITY;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Priority不为0的情况下,使用sortEventListenersOfFixedPriority进行排序。<br>Priority为0的情况下,使用sortEventListenersOfSceneGraphPriority进行排序。<br>TouchListener是ScreenGraphPriority,也就是0，使用后者进行排序</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> EventDispatcher::sortEventListenersOfSceneGraphPriority(<span class="keyword">const</span> EventListener::ListenerID&amp; listenerID, Node* rootNode)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">auto</span> listeners = getListeners(listenerID);</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (listeners == <span class="literal">nullptr</span>)</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    <span class="keyword">auto</span> sceneGraphListeners = listeners-&gt;getSceneGraphPriorityListeners();</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (sceneGraphListeners == <span class="literal">nullptr</span>)</div><div class="line">        <span class="keyword">return</span>;</div><div class="line"></div><div class="line">    <span class="comment">// Reset priority index</span></div><div class="line">    _nodePriorityIndex = <span class="number">0</span>;</div><div class="line">    _nodePriorityMap.clear();</div><div class="line"></div><div class="line">    visitTarget(rootNode, <span class="literal">true</span>);</div><div class="line">    </div><div class="line">    <span class="comment">// After sort: priority &lt; 0, &gt; 0</span></div><div class="line">    <span class="built_in">std</span>::sort(sceneGraphListeners-&gt;begin(), sceneGraphListeners-&gt;end(), [<span class="keyword">this</span>](<span class="keyword">const</span> EventListener* l1, <span class="keyword">const</span> EventListener* l2) &#123;</div><div class="line">        <span class="keyword">return</span> _nodePriorityMap[l1-&gt;getAssociatedNode()] &gt; _nodePriorityMap[l2-&gt;getAssociatedNode()];</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>先用visitTarget方法，生成一个优先级nodePriorityMap，key是Node,value是优先级，进行排序。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> EventDispatcher::visitTarget(Node* node, <span class="keyword">bool</span> isRootNode)</div><div class="line">&#123;    </div><div class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">    <span class="keyword">auto</span>&amp; children = node-&gt;getChildren();</div><div class="line">    </div><div class="line">    <span class="keyword">auto</span> childrenCount = children.size();</div><div class="line">    </div><div class="line">    <span class="keyword">if</span>(childrenCount &gt; <span class="number">0</span>)</div><div class="line">    &#123;</div><div class="line">        Node* child = <span class="literal">nullptr</span>;</div><div class="line">        <span class="comment">// visit children zOrder &lt; 0</span></div><div class="line">        <span class="keyword">for</span>( ; i &lt; childrenCount; i++ )</div><div class="line">        &#123;</div><div class="line">            child = children.at(i);</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> ( child &amp;&amp; child-&gt;getLocalZOrder() &lt; <span class="number">0</span> )</div><div class="line">                visitTarget(child, <span class="literal">false</span>);</div><div class="line">            <span class="keyword">else</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (_nodeListenersMap.find(node) != _nodeListenersMap.end())</div><div class="line">        &#123;</div><div class="line">            _globalZOrderNodeMap[node-&gt;getGlobalZOrder()].push_back(node);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span>( ; i &lt; childrenCount; i++ )</div><div class="line">        &#123;</div><div class="line">            child = children.at(i);</div><div class="line">            <span class="keyword">if</span> (child)</div><div class="line">                visitTarget(child, <span class="literal">false</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (_nodeListenersMap.find(node) != _nodeListenersMap.end())</div><div class="line">        &#123;</div><div class="line">            _globalZOrderNodeMap[node-&gt;getGlobalZOrder()].push_back(node);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (isRootNode)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt; globalZOrders;</div><div class="line">        globalZOrders.reserve(_globalZOrderNodeMap.size());</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; e : _globalZOrderNodeMap)</div><div class="line">        &#123;</div><div class="line">            globalZOrders.push_back(e.first);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="built_in">std</span>::sort(globalZOrders.begin(), globalZOrders.end(), [](<span class="keyword">const</span> <span class="keyword">float</span> a, <span class="keyword">const</span> <span class="keyword">float</span> b)&#123;</div><div class="line">            <span class="keyword">return</span> a &lt; b;</div><div class="line">        &#125;);</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; globalZ : globalZOrders)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; n : _globalZOrderNodeMap[globalZ])</div><div class="line">            &#123;</div><div class="line">                _nodePriorityMap[n] = ++_nodePriorityIndex;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        _globalZOrderNodeMap.clear();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
           
         
@@ -490,7 +588,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
